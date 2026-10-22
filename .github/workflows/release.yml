@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check tag matches pyproject version
+        run: |
+          VERSION=$(grep -m1 '^version' pyproject.toml | sed 's/.*"\(.*\)".*/\1/')
+          if [[ "${GITHUB_REF_NAME}" != "v${VERSION}" ]]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match pyproject version v${VERSION}"; exit 1
+          fi
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true

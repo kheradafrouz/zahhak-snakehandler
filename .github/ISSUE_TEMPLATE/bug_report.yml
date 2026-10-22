@@ -1,0 +1,44 @@
+name: Bug report
+description: Something is broken or behaves unexpectedly
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you see instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact command(s) you ran, including flags and seed.
+      render: shell
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options: [CPU, CUDA, MPS]
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: "Output of: python -c \"import sys, torch, pygame; print(sys.version, torch.__version__, pygame.version.ver)\""
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / traceback
+      render: text

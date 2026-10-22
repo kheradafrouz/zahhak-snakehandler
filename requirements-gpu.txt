@@ -1,0 +1,6 @@
+# NVIDIA CUDA build of PyTorch. Pick the CUDA version matching your driver
+# at https://pytorch.org/get-started/locally/ (cu118 / cu121 / cu124 ...).
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch>=2.0
+pygame>=2.5
+numpy>=1.24

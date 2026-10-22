@@ -1,0 +1,22 @@
+name: GPU check (manual)
+
+# Runs only when triggered by hand, on a self-hosted runner labelled "gpu"
+# with an NVIDIA GPU and a CUDA build of PyTorch installed.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cuda:
+    runs-on: [self-hosted, gpu]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show GPU
+        run: nvidia-smi
+      - name: Confirm PyTorch sees CUDA
+        run: python -c "import torch; assert torch.cuda.is_available(), 'CUDA not available'; print(torch.cuda.get_device_name(0))"
+      - name: Train briefly on GPU
+        run: python -m zahhak_snakehandler.train --preset gpu --device cuda --episodes 100 --seed 1
